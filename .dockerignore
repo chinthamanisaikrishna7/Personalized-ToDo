@@ -1,0 +1,11 @@
+.git
+.vs
+**/bin
+**/obj
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+**/*.user
+**/appsettings*.json
+**/secrets*.json
+**/.env*

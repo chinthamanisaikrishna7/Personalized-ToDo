@@ -1,0 +1,21 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: src/Todo.API/Dockerfile
+    image: ${DOCKERHUB_USERNAME:-local}/cqrs-todo-api:${IMAGE_TAG:-latest}
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__TodoDb: ${TODO_DB_CONNECTION:?Set TODO_DB_CONNECTION in your .env file}
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./src/Todo.Web
+      dockerfile: Dockerfile
+    image: ${DOCKERHUB_USERNAME:-local}/cqrs-todo-web:${IMAGE_TAG:-latest}
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      - api
+    restart: unless-stopped
