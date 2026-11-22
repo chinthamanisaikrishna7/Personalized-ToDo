@@ -57,3 +57,10 @@ coverage/
 
 # other
 .vagrant/
+
+# TypeScript incremental build state
+*.tsbuildinfo
+
+# Local configuration and one-off history script
+.env.example
+commit-frontend.ps1
