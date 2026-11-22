@@ -1,0 +1,44 @@
+name: Build and publish images
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Only one publishing run at a time, so an older run cannot overwrite latest.
+concurrency:
+  group: docker-hub-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v6
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: chinthamanisaikrishna
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build API image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: src/Todo.API/Dockerfile
+          load: true
+          tags: chinthamanisaikrishna/cqrs-todo-api:latest
+      - name: Build web image
+        uses: docker/build-push-action@v7
+        with:
+          context: ./src/Todo.Web
+          file: src/Todo.Web/Dockerfile
+          load: true
+          tags: chinthamanisaikrishna/cqrs-todo-web:latest
+      - name: Push images to Docker Hub
+        run: |
+          docker push chinthamanisaikrishna/cqrs-todo-api:latest
+          docker push chinthamanisaikrishna/cqrs-todo-web:latest
