@@ -10,8 +10,10 @@ Run `database/setup.sql` in SQL Server Management Studio, connected to your SQL 
 
 Install the .NET 10 SDK and Node.js. Configure `ConnectionStrings:TodoDb` for your SQL Server instance using ASP.NET Core user secrets or environment variables.
 
-1. Run the API: `dotnet run --project src/Todo.API --launch-profile http` (HTTP on `http://localhost:5051`).
-2. Run `npm install` and `npm run dev` in `src/Todo.Web`, then visit `http://localhost:5173`.
+1. Run `npm install` once in `src/Todo.Web` to install frontend dependencies.
+2. Run the API: `dotnet run --project src/Todo.API --launch-profile http` (HTTP on `http://localhost:5051`), or start the API project with its `http` or `https` launch profile in Visual Studio. The development profile starts Vite too. Wait for its ready message, then open `http://localhost:5173`. Stopping the API stops the Vite process that it started.
+
+To start the frontend separately, set `StartFrontend` to `false` in the chosen launch profile and run `npm run dev` in `src/Todo.Web`. If the frontend fails to start, check the API output for missing Node.js/dependencies or an occupied port 5173. The automatic launcher only runs in Development when explicitly enabled by the launch profile; Docker and production do not launch Vite.
 
 The Vite development server forwards `/api` requests to the API. Search and status filters operate on the loaded list in the browser.
 

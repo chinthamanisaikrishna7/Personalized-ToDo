@@ -39,6 +39,11 @@ builder.Services.AddCors(options =>
 });
 
 
+if (builder.Environment.IsDevelopment() && builder.Configuration.GetValue<bool>("StartFrontend"))
+{
+    builder.Services.AddHostedService<Todo.API.Development.FrontendDevServer>();
+}
+
 var app = builder.Build();
 
 
